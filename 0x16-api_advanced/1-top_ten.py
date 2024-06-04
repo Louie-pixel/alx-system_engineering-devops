@@ -1,23 +1,37 @@
 #!/usr/bin/python3
-""" Exporting csv files"""
-import json
+"""
+Script to print hot posts on a given Reddit subreddit.
+"""
+
 import requests
-import sys
 
 
 def top_ten(subreddit):
-    """Read reddit API and return top 10 hotspots """
-    username = 'ledbag123'
-    password = 'Reddit72'
-    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
-    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    client = requests.session()
-    client.headers = headers
-    r = client.get(url, allow_redirects=False)
-    if r.status_code == 200:
-        list_titles = r.json()['data']['children']
-        for a in list_titles[:10]:
-            print(a['data']['title'])
-    else:
-        return(print("None"))
+    """Print the titles of the 10 hottest posts on a given subreddit."""
+    # Construct the URL for the subreddit's hot posts in JSON format
+    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+
+    # Define headers for the HTTP request, including User-Agent
+    headers = {
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+    }
+
+    # Define parameters for the request, limiting the number of posts to 10
+    params = {
+        "limit": 10
+    }
+
+    # Send a GET request to the subreddit's hot posts page
+    response = requests.get(url, headers=headers, params=params,
+                            allow_redirects=False)
+
+    # Check if the response status code indicates a not-found error (404)
+    if response.status_code == 404:
+        print("None")
+        return
+
+    # Parse the JSON response and extract the 'data' section
+    results = response.json().get("data")
+
+    # Print the titles of the top 10 hottest posts
+    [print(c.get("data").get("title")) for c in results.get("children")]
