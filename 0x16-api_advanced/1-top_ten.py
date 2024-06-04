@@ -1,23 +1,23 @@
 #!/usr/bin/python3
-"""
-Using reddit's API to print titles of top 10 hot posts in a subreddit
-"""
+""" Exporting csv files"""
+import json
 import requests
+import sys
+
 
 def top_ten(subreddit):
-    """Prints the titles of the first 10 hot posts for a given subreddit."""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'api_advanced-project'}
-    params = {'limit': 10}
-    
-    try:
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
-        if response.status_code == 200:
-            data = response.json()
-            posts = data.get("data", {}).get("children", [])
-            for post in posts:
-                print(post.get("data", {}).get("title"))
-        else:
-            print(None)
-    except requests.RequestException:
-        print(None)
+    """Read reddit API and return top 10 hotspots """
+    username = 'ledbag123'
+    password = 'Reddit72'
+    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
+    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    client = requests.session()
+    client.headers = headers
+    r = client.get(url, allow_redirects=False)
+    if r.status_code == 200:
+        list_titles = r.json()['data']['children']
+        for a in list_titles[:10]:
+            print(a['data']['title'])
+    else:
+        return(print("None"))
