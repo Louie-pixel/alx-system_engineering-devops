@@ -5,7 +5,6 @@ Using reddit's API
 import requests
 after = None
 
-
 def recurse(subreddit, hot_list=[]):
     """returning top ten post titles recursively"""
     global after
@@ -26,3 +25,18 @@ def recurse(subreddit, hot_list=[]):
         return hot_list
     else:
         return (None)
+
+def number_of_subscribers(subreddit):
+    """Returns the number of subscribers for a given subreddit."""
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    headers = {'User-Agent': 'api_advanced-project'}
+    
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        if response.status_code == 200:
+            data = response.json()
+            if 'data' in data and 'subscribers' in data['data']:
+                return data['data']['subscribers']
+        return 0
+    except requests.RequestException:
+        return 0
