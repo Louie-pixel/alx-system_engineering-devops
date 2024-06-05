@@ -1,3 +1,4 @@
+![0_-N6a2EtdODipPnGS](https://github.com/Louie-pixel/alx-system_engineering-devops/assets/130101289/0de8095e-1ef5-4806-9ac9-93858ef04530)
 Summary
 On September 11th, 2018 at midnight the server access went down resulting in a 504 error for anyone trying to access a website. The background on the server is based on a LAMP stack.
 
