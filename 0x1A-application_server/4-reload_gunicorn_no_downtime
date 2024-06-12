@@ -1,1 +1,19 @@
-Lets see
+#!/bin/bash
+
+# Debugging step: Print all Gunicorn processes
+echo "Current Gunicorn processes:"
+ps aux | grep gunicorn
+
+# Get the process ID of the Gunicorn master process
+PID=$(pgrep -f 'gunicorn.*--bind 0.0.0.0:5003.*web_dynamic.2-hbnb:app')
+
+# Check if PID is found
+if [ -z "$PID" ]; then
+    echo "Gunicorn master process not found."
+    exit 1
+fi
+
+# Reload the Gunicorn master process gracefully
+kill -HUP "$PID"
+
+echo "Gunicorn gracefully reloaded."
